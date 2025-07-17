@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
-import { isSpam } from '../services/spamDetector';
+import { analyzeMessage } from '../services/spamDetector';
 import colors from '../constants/colors';
 import * as Speech from 'expo-speech';
 
@@ -14,8 +14,10 @@ export default function ChatbotScreen() {
             message = "Please enter a message first!";
             return;
         }
-        if (isSpam(input)){
-            message = "This message might be a scam!";
+        const { isSpam, reasons } = analyzeMessage(input);
+
+        if (isSpam){
+            message = "This message might be a scam!\n" + reasons.join("\n• ");
         } else {
             message = "This message looks safe";
         }
