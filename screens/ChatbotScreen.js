@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { isSpam } from '../services/spamDetector';
 
 export default function ChatbotScreen() {
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
 
     const handleCheckSpam = () => {
-        if (input.toLowerCase().includes("gift card") || input.toLowerCase().includes("urgent")){
+        if(!input.trim()) {
+            setResponse("Please enter a message first!");
+            return;
+        }
+        if (isSpam(input)){
             setResponse("This message might be a scam!");
         } else {
             setResponse("This message looks safe");
